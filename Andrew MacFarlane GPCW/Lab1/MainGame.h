@@ -32,6 +32,7 @@ private:
 	void setToonLighting();
 	void DrawModels();
 	void SetRimToonValues();
+	void SetFogValues(float z_pos);
 
 	Display _gameDisplay;
 	GameState _gameState;
@@ -46,6 +47,7 @@ private:
 	Shader blurShader;
 	Shader defaultShader;
 	Shader rimToonShader;
+	Shader fogShader;
 
 	glm::mat4 modelView;
 

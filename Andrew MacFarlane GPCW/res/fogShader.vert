@@ -1,15 +1,25 @@
 #version 400
 
-//todo pass in the vertex Positions and vertex normals 
+layout (location = 0) in vec3 VertexPosition;
+layout (location = 2) in vec3 VertexNormal;
 
-//todo create a variable to hold the transfrom 
+attribute vec3 position;
+attribute vec2 texCoord;
+attribute vec3 normal;
+varying vec2 texCoord0;
+varying vec3 normal0;
+
+uniform mat4 transform;
 
 out vec3 v_norm;
 out vec4 v_pos; 
 
 void main()
 {
-//todo pass the vertex normals and vertex positions to the fragment shader
-
-//todo	set out vertex positions and store them in gl_position
+    gl_Position = transform * vec4(VertexPosition, 1.0);
+	v_norm = VertexNormal;
+	v_pos = vec4(VertexPosition, 1.0);
+	texCoord0 = texCoord;
+	normal0 = (transform * vec4(normal, 0.0)).xyz;
+	
 }

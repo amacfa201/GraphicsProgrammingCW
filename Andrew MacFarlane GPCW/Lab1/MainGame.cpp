@@ -25,6 +25,7 @@ MainGame::MainGame()
 	Shader* blurShader();
 	Shader* defaultShader();
 	Shader* rimToonShader();
+	Shader* fogShader();
 	
 }
 
@@ -53,13 +54,14 @@ void MainGame::initSystems()
 	rimToonShader.init("..\\res\\shaderRimToon.vert","..\\res\\shaderRimToon.frag");
 	blurShader.init("..\\res\\shaderBlur.vert", "..\\res\\shaderBlur.frag");
 	defaultShader.init("..\\res\\shader.vert", "..\\res\\shader.frag");
+	fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag");
 	
 
 	overlay.init("..\\res\\bricks.jpg");
 
-	guitarMesh.loadModel("..\\res\\monkey3.obj");
-	orangeMesh.loadModel("..\\res\\monkey3.obj");
-	therockMesh.loadModel("..\\res\\monkey3.obj");
+	guitarMesh.loadModel("..\\res\\TheRock.obj");
+	orangeMesh.loadModel("..\\res\\TheRock.obj");
+	therockMesh.loadModel("..\\res\\TheRock.obj");
 
 	
 	myCamera.initCamera(glm::vec3(0, 0, -10.0), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
@@ -164,6 +166,18 @@ void MainGame::SetRimToonValues()
 	rimToonShader.setMat4("v_pos", orangeTransform.GetModel());
 }
 
+void MainGame::SetFogValues(float z_pos)
+{
+	fogShader.setVec3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	fogShader.setMat4("u_vm", myCamera.GetView());
+	fogShader.setMat4("u_pm", myCamera.GetProjection());
+	fogShader.setVec3("fogColor", glm::vec3(0.2, 0.8, 0.2));
+	fogShader.setFloat("minDist", -5.0f);
+	fogShader.setFloat("maxDist", 5.0f);
+	fogShader.setFloat("z_pos", z_pos);
+
+}
+
 
 
 void MainGame::blobEffect()
@@ -225,38 +239,41 @@ void MainGame::drawGame()
 {
 	_gameDisplay.clearDisplay(0.0f, 0.0f, 0.0f, 1.0f);
 
-	//Guitar
-	guitarTransform.SetPos(glm::vec3(sinf(counter), 0.5, 0.0));
-	guitarTransform.SetRot(glm::vec3(0.0, counter * 5, 0.0));
-	guitarTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
-	SetRimToonValues();
-	rimToonShader.Bind();
-	rimToonShader.Update(guitarTransform, myCamera);
-	//brickTexture.Bind(0);
+	//Guitar - fog
+	guitarTransform.SetPos(glm::vec3(sinf(counter), 0.5, -sinf(counter) * 5));
+	guitarTransform.SetRot(glm::vec3(-0.65, counter * 5, 0));
+	//guitarTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
+	guitarTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
+	fogShader.Bind();
+	SetFogValues(guitarMesh.getSpherePos().z + 4);
+	fogShader.Update(guitarTransform, myCamera);
+	rockTexture.Bind(0);
 	guitarMesh.draw();
 	guitarMesh.updateSphereData(*guitarTransform.GetPos(), 0.62f);
 	
-	//Orange
+	//Orange - Blur
 	orangeTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter)*5));
 	orangeTransform.SetRot(glm::vec3(0.0, counter * 5, 0.0));
-	orangeTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
+	//orangeTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
+	orangeTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
 	rimToonShader.Bind();
 	SetRimToonValues();
 	rimToonShader.Update(orangeTransform, myCamera);
-	//orangeMesh.draw();
-	//orangeMesh.updateSphereData(*orangeTransform.GetPos(), 0.62f);
+	orangeMesh.draw();
+	orangeMesh.updateSphereData(*orangeTransform.GetPos(), 0.62f);
 
-	//The Rock
+	//The Rock - Rim Toon
 	rockTransform.SetPos(glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)));
 	rockTransform.SetRot(glm::vec3(0.0, counter * 5, 0.0));
 	rockTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
-	rockTexture.Bind(0);
-	blobEffect();
+	//rockTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
+	//rockTexture.Bind(0);
+
 	blurShader.Bind();
-	
+	blobEffect();
 	blurShader.Update(rockTransform, myCamera);
-	//therockMesh.draw();
-	//therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
+	therockMesh.draw();
+	therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
 
 	counter = counter + 0.01f;
 
