@@ -99,6 +99,10 @@
   <ItemGroup>
     <None Include="..\res\fogShader.frag" />
     <None Include="..\res\fogShader.vert" />
+    <None Include="..\res\lightSourceShader.frag" />
+    <None Include="..\res\lightSourceShader.vert" />
+    <None Include="..\res\phongShader.frag" />
+    <None Include="..\res\phongShader.vert" />
     <None Include="..\res\shader.frag" />
     <None Include="..\res\shader.vert" />
     <None Include="..\res\shaderBlur.frag" />

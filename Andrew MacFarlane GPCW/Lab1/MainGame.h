@@ -33,6 +33,7 @@ private:
 	void DrawModels();
 	void SetRimToonValues();
 	void SetFogValues(float z_pos);
+	void SetPhongValues();
 
 	Display _gameDisplay;
 	GameState _gameState;
@@ -48,6 +49,8 @@ private:
 	Shader defaultShader;
 	Shader rimToonShader;
 	Shader fogShader;
+	Shader phongShader;
+	Shader lightSourceShader;
 
 	glm::mat4 modelView;
 

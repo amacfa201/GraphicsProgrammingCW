@@ -17,9 +17,7 @@ uniform float minDist; //fog min distance
 uniform float z_pos;
 
 
-varying vec2 texCoord0;
-varying vec3 normal0;
-uniform sampler2D diffuse;
+
 
 vec3 rimToon() {
  
@@ -55,7 +53,7 @@ vec3 rimToon() {
 	fogFactor = clamp( fogFactor, 0.0, 1.0 );
 	vec3 toonRim = rimToon(); // this is your method from above
 
-	gl_FragColor = texture2D(diffuse, texCoord0) * (dot(-vec3(0,0,1) , normal0), 0.0, 1.0)*1.5;
+	
 
 	vec3 color = mix( fogColor, toonRim, fogFactor);
 	fragcolor = vec4(color, 1.0);

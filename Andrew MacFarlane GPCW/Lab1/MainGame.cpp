@@ -26,6 +26,7 @@ MainGame::MainGame()
 	Shader* defaultShader();
 	Shader* rimToonShader();
 	Shader* fogShader();
+	Shader* phongShader();
 	
 }
 
@@ -55,7 +56,8 @@ void MainGame::initSystems()
 	blurShader.init("..\\res\\shaderBlur.vert", "..\\res\\shaderBlur.frag");
 	defaultShader.init("..\\res\\shader.vert", "..\\res\\shader.frag");
 	fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag");
-	
+	phongShader.init("..\\res\\phongShader.vert", "..\\res\\phongShader.frag");
+	phongShader.init("..\\res\\lightSourceShader.vert", "..\\res\\lightSourceShader.frag");
 
 	overlay.init("..\\res\\bricks.jpg");
 
@@ -176,6 +178,12 @@ void MainGame::SetFogValues(float z_pos)
 	fogShader.setFloat("maxDist", 5.0f);
 	fogShader.setFloat("z_pos", z_pos);
 
+}
+
+void MainGame::SetPhongValues()
+{
+	phongShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+	phongShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 }
 
 

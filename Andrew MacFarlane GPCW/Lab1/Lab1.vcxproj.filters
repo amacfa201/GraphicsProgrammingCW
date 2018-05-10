@@ -118,6 +118,18 @@
     <None Include="..\res\shaderRimToon.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\phongShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\phongShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\lightSourceShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\lightSourceShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">
