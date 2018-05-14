@@ -34,12 +34,15 @@ private:
 	void SetRimToonValues();
 	void SetFogValues(float z_pos);
 	void SetPhongValues();
+	void SetLightValues();
 
 	Display _gameDisplay;
 	GameState _gameState;
 	Mesh guitarMesh;
 	Mesh orangeMesh;
 	Mesh therockMesh;
+	Mesh phongMesh;
+	Mesh phongLightMesh;
 	Texture brickTexture;
 	Texture rockTexture;
 	Texture waterTexture;

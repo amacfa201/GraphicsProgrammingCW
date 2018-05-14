@@ -8,6 +8,8 @@
 Transform guitarTransform;
 Transform orangeTransform;
 Transform rockTransform;
+Transform phongTransform;
+Transform phongLightTransform;
 
 MainGame::MainGame()
 {
@@ -16,6 +18,8 @@ MainGame::MainGame()
     Mesh* guitarMesh();
 	Mesh* orangeMesh();
 	Mesh* therockMesh();
+	Mesh* phongLightMesh();
+	Mesh* phongMesh();
 	Audio* audioDevice();
 	Texture* brickTexture(); //load texture
 	Texture* waterTexture(); //load texture
@@ -27,6 +31,7 @@ MainGame::MainGame()
 	Shader* rimToonShader();
 	Shader* fogShader();
 	Shader* phongShader();
+	Shader* lightSourceShader();
 	
 }
 
@@ -57,14 +62,15 @@ void MainGame::initSystems()
 	defaultShader.init("..\\res\\shader.vert", "..\\res\\shader.frag");
 	fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag");
 	phongShader.init("..\\res\\phongShader.vert", "..\\res\\phongShader.frag");
-	phongShader.init("..\\res\\lightSourceShader.vert", "..\\res\\lightSourceShader.frag");
+	lightSourceShader.init("..\\res\\lightSourceShader.vert", "..\\res\\lightSourceShader.frag");
 
 	overlay.init("..\\res\\bricks.jpg");
 
 	guitarMesh.loadModel("..\\res\\TheRock.obj");
 	orangeMesh.loadModel("..\\res\\TheRock.obj");
 	therockMesh.loadModel("..\\res\\TheRock.obj");
-
+	phongMesh.loadModel(("..\\res\\TheRock.obj"));
+	phongLightMesh.loadModel(("..\\res\\TheRock.obj"));
 	
 	myCamera.initCamera(glm::vec3(0, 0, -10.0), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
 
@@ -186,6 +192,11 @@ void MainGame::SetPhongValues()
 	phongShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 }
 
+void MainGame::SetLightValues()
+{
+
+}
+
 
 
 void MainGame::blobEffect()
@@ -248,20 +259,20 @@ void MainGame::drawGame()
 	_gameDisplay.clearDisplay(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//Guitar - fog
-	guitarTransform.SetPos(glm::vec3(sinf(counter), 0.5, -sinf(counter) * 5));
-	guitarTransform.SetRot(glm::vec3(-0.65, counter * 5, 0));
+	guitarTransform.SetPos(glm::vec3(sinf(counter), 0.5, -sinf(counter)));
+	guitarTransform.SetRot(glm::vec3(-0.65, counter/2, 0));
 	//guitarTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 	guitarTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
 	fogShader.Bind();
 	SetFogValues(guitarMesh.getSpherePos().z + 4);
 	fogShader.Update(guitarTransform, myCamera);
-	rockTexture.Bind(0);
+	//rockTexture.Bind(0);
 	guitarMesh.draw();
 	guitarMesh.updateSphereData(*guitarTransform.GetPos(), 0.62f);
 	
 	//Orange - Blur
-	orangeTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter)*5));
-	orangeTransform.SetRot(glm::vec3(0.0, counter * 5, 0.0));
+	orangeTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter)));
+	orangeTransform.SetRot(glm::vec3(0.0, counter/2, 0.0));
 	//orangeTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 	orangeTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
 	rimToonShader.Bind();
@@ -272,10 +283,10 @@ void MainGame::drawGame()
 
 	//The Rock - Rim Toon
 	rockTransform.SetPos(glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)));
-	rockTransform.SetRot(glm::vec3(0.0, counter * 5, 0.0));
+	rockTransform.SetRot(glm::vec3(0.0, counter/2, 0.0));
 	rockTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
-	//rockTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
-	//rockTexture.Bind(0);
+	rockTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
+	rockTexture.Bind(0);
 
 	blurShader.Bind();
 	blobEffect();
@@ -283,8 +294,28 @@ void MainGame::drawGame()
 	therockMesh.draw();
 	therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
 
-	counter = counter + 0.01f;
+	//phongModel
+	phongTransform.SetPos(glm::vec3(1, -1.0, 1));
+	phongTransform.SetRot(glm::vec3(0.0, counter / 2, 0.0));
+	phongTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
+	phongShader.Bind();
+	SetPhongValues();
+	phongShader.Update(orangeTransform, myCamera);
+	phongMesh.draw();
+	phongMesh.updateSphereData(*orangeTransform.GetPos(), 0.62f);
+	
+	//phongModelLighSource
+	phongLightTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter)));
+	phongLightTransform.SetRot(glm::vec3(0.0, 0, 0.0));
+	phongLightTransform.SetScale(glm::vec3(0.005, 0.005, 0.005));
+	lightSourceShader.Bind();
+	lightSourceShader.Update(orangeTransform, myCamera);
+	phongLightMesh.draw();
+	phongLightMesh.updateSphereData(*orangeTransform.GetPos(), 0.62f);
 
+
+	counter = counter + 0.001f;
+	cout << counter << "\n";
 	glEnableClientState(GL_COLOR_ARRAY); 
 	glEnd();
 
