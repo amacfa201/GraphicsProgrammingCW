@@ -35,6 +35,7 @@ private:
 	void SetFogValues(float z_pos);
 	void SetPhongValues();
 	void SetLightValues();
+	void SetHairValues();
 
 	Display _gameDisplay;
 	GameState _gameState;
@@ -54,6 +55,9 @@ private:
 	Shader fogShader;
 	Shader phongShader;
 	Shader lightSourceShader;
+	Shader hairShader;
+
+	glm::vec3 lightPos;
 
 	glm::mat4 modelView;
 

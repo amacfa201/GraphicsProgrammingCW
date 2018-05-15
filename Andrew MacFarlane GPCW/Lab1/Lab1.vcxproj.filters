@@ -130,6 +130,18 @@
     <None Include="..\res\lightSourceShader.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\hairShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\hairShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="hairShader.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\hairShader.geo">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">

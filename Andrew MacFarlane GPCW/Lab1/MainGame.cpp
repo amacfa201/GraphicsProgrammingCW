@@ -11,6 +11,8 @@ Transform rockTransform;
 Transform phongTransform;
 Transform phongLightTransform;
 
+
+
 MainGame::MainGame()
 {
 	_gameState = GameState::PLAY;
@@ -32,6 +34,9 @@ MainGame::MainGame()
 	Shader* fogShader();
 	Shader* phongShader();
 	Shader* lightSourceShader();
+	Shader* hairShader();
+
+
 	
 }
 
@@ -63,6 +68,8 @@ void MainGame::initSystems()
 	fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag");
 	phongShader.init("..\\res\\phongShader.vert", "..\\res\\phongShader.frag");
 	lightSourceShader.init("..\\res\\lightSourceShader.vert", "..\\res\\lightSourceShader.frag");
+	hairShader.init("..\\res\\hairShader.vert", "..\\res\\hairShader.frag", "..\\res\\hairShader.geo");
+
 
 	overlay.init("..\\res\\bricks.jpg");
 
@@ -70,8 +77,10 @@ void MainGame::initSystems()
 	orangeMesh.loadModel("..\\res\\TheRock.obj");
 	therockMesh.loadModel("..\\res\\TheRock.obj");
 	phongMesh.loadModel(("..\\res\\TheRock.obj"));
-	phongLightMesh.loadModel(("..\\res\\TheRock.obj"));
+	phongLightMesh.loadModel(("..\\res\\monkey3.obj"));
 	
+	lightPos = glm::vec3(1.2f,1.0f,-1.0f);
+
 	myCamera.initCamera(glm::vec3(0, 0, -10.0), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
 
 	counter = 1.0f;
@@ -82,6 +91,7 @@ void MainGame::gameLoop()
 	while (_gameState != GameState::EXIT)
 	{
 		processInput();
+		SetPhongValues();
 		drawGame();
 		collision(guitarMesh.getSpherePos(), guitarMesh.getSphereRadius(), orangeMesh.getSpherePos(), orangeMesh.getSphereRadius());
 		playAudio(backGroundMusic, glm::vec3(0.0f,0.0f,0.0f));
@@ -188,8 +198,31 @@ void MainGame::SetFogValues(float z_pos)
 
 void MainGame::SetPhongValues()
 {
-	phongShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+	
+
+	
+	/*phongShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 	phongShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	phongShader.setVec3("lightPos", lightPos);
+	phongShader.setVec3("viewPos", myCamera.getPos());*/
+
+	//phongShader.setVec3("viewPos", myCamera.getPos());
+	//phongShader.setVec3("lightPos", phongLightMesh.getSpherePos());
+	//phongShader.setInt("blinn", true);
+
+	phongShader.setVec3("lightPos", phongLightMesh.getSpherePos());
+	phongShader.setVec3("viewPos", myCamera.getPos());
+	phongShader.setInt("blinn", true);
+
+}
+
+void MainGame::SetHairValues()
+{
+	hairShader.setMat4("projection", myCamera.GetProjection());
+	hairShader.setMat4("view", myCamera.GetView());
+	hairShader.setMat4("model", orangeTransform.GetModel());
+
+
 }
 
 void MainGame::SetLightValues()
@@ -256,10 +289,10 @@ void MainGame::DrawModels()
 
 void MainGame::drawGame()
 {
-	_gameDisplay.clearDisplay(0.0f, 0.0f, 0.0f, 1.0f);
+	_gameDisplay.clearDisplay(0.0f, 0.5f, 0.5f, 1.0f);
 
 	//Guitar - fog
-	guitarTransform.SetPos(glm::vec3(sinf(counter), 0.5, -sinf(counter)));
+	guitarTransform.SetPos(glm::vec3(0.5, 0.5, 0.5));
 	guitarTransform.SetRot(glm::vec3(-0.65, counter/2, 0));
 	//guitarTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 	guitarTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
@@ -267,19 +300,19 @@ void MainGame::drawGame()
 	SetFogValues(guitarMesh.getSpherePos().z + 4);
 	fogShader.Update(guitarTransform, myCamera);
 	//rockTexture.Bind(0);
-	guitarMesh.draw();
-	guitarMesh.updateSphereData(*guitarTransform.GetPos(), 0.62f);
+	//guitarMesh.draw();
+	//guitarMesh.updateSphereData(*guitarTransform.GetPos(), 0.62f);
 	
 	//Orange - Blur
 	orangeTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter)));
 	orangeTransform.SetRot(glm::vec3(0.0, counter/2, 0.0));
 	//orangeTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 	orangeTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
-	rimToonShader.Bind();
-	SetRimToonValues();
-	rimToonShader.Update(orangeTransform, myCamera);
-	orangeMesh.draw();
-	orangeMesh.updateSphereData(*orangeTransform.GetPos(), 0.62f);
+	hairShader.Bind();
+	SetHairValues();
+	hairShader.Update(orangeTransform, myCamera);
+	//orangeMesh.draw();
+	//orangeMesh.updateSphereData(*orangeTransform.GetPos(), 0.62f);
 
 	//The Rock - Rim Toon
 	rockTransform.SetPos(glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)));
@@ -291,31 +324,37 @@ void MainGame::drawGame()
 	blurShader.Bind();
 	blobEffect();
 	blurShader.Update(rockTransform, myCamera);
-	therockMesh.draw();
-	therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
+	//therockMesh.draw();
+	//therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
+
+	//phongModelLighSource
+	phongLightTransform.SetPos(glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)*2));
+	phongLightTransform.SetRot(glm::vec3(0.0, 0 , 0.0));
+	phongLightTransform.SetScale(glm::vec3(0.8, 0.8, 0.8));
+	lightSourceShader.Bind();
+	lightSourceShader.Update(phongLightTransform, myCamera);
+	phongLightMesh.draw();
+	phongLightMesh.updateSphereData(*phongLightTransform.GetPos(), 0.62f);
+
 
 	//phongModel
-	phongTransform.SetPos(glm::vec3(1, -1.0, 1));
-	phongTransform.SetRot(glm::vec3(0.0, counter / 2, 0.0));
+	phongTransform.SetPos(glm::vec3(0.5,0.5,0.5));
+	phongTransform.SetRot(glm::vec3(0.0,counter * 2 , 0.0));
 	phongTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
+	
 	phongShader.Bind();
 	SetPhongValues();
-	phongShader.Update(orangeTransform, myCamera);
-	phongMesh.draw();
-	phongMesh.updateSphereData(*orangeTransform.GetPos(), 0.62f);
+	phongShader.Update(phongTransform, myCamera);
 	
-	//phongModelLighSource
-	phongLightTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter)));
-	phongLightTransform.SetRot(glm::vec3(0.0, 0, 0.0));
-	phongLightTransform.SetScale(glm::vec3(0.005, 0.005, 0.005));
-	lightSourceShader.Bind();
-	lightSourceShader.Update(orangeTransform, myCamera);
-	phongLightMesh.draw();
-	phongLightMesh.updateSphereData(*orangeTransform.GetPos(), 0.62f);
+	phongMesh.draw();
+	phongMesh.updateSphereData(*phongTransform.GetPos(), 0.62f);
+	
+	
 
 
-	counter = counter + 0.001f;
-	cout << counter << "\n";
+	counter = counter + 0.005f;
+	glm::vec3 yerMaw = phongLightMesh.getSpherePos();
+	cout << yerMaw.x << " " << yerMaw.y << " " << yerMaw.z << "\n";
 	glEnableClientState(GL_COLOR_ARRAY); 
 	glEnd();
 

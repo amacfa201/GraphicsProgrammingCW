@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D246FDDF-B30E-4F14-80F8-095FA4E04ECF}</ProjectGuid>
     <RootNamespace>Lab1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -99,6 +99,9 @@
   <ItemGroup>
     <None Include="..\res\fogShader.frag" />
     <None Include="..\res\fogShader.vert" />
+    <None Include="..\res\hairShader.frag" />
+    <None Include="..\res\hairShader.geo" />
+    <None Include="..\res\hairShader.vert" />
     <None Include="..\res\lightSourceShader.frag" />
     <None Include="..\res\lightSourceShader.vert" />
     <None Include="..\res\phongShader.frag" />
@@ -113,6 +116,7 @@
     <None Include="..\res\shaderRimToon.vert" />
     <None Include="..\res\shaderToon.frag" />
     <None Include="..\res\shaderToon.vert" />
+    <None Include="hairShader.geo" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\guitar.obj">
