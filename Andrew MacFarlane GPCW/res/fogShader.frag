@@ -24,7 +24,7 @@ vec3 rimToon() {
   vec3 n = normalize(mat3(u_vm) * v_norm);      // convert normal to view space
   vec3 p = vec3((u_pm) * v_pos);                // position in clip space
   vec3 v = normalize(-p);                        // normalised eye vector
-  float vdn = 1.0 - max(dot(v, n), 0.0);        // the rim contribution
+  float vdn = 1.0 - max(dot(v, n), 0.0);        // the rim 
  
  	float intensity;
 	vec4 color;
@@ -42,8 +42,7 @@ vec3 rimToon() {
   fragcolor.a = 0.4;
  
  
- return vec3(smoothstep(0.4, 0.6, vdn)) * color.xyz; // return this value do 									//not set the fragcolor
-
+ return vec3(smoothstep(0.4, 0.6, vdn)) * color.xyz;  								
  }
 
  void main() {

@@ -22,9 +22,9 @@ public:
 private:
 
 	void initSystems();
-	void processInput();
+	void HandleInput();
 	void gameLoop();
-	void drawGame();
+	void drawLoop();
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void playAudio(unsigned int Source, glm::vec3 pos);
 	void blobEffect();

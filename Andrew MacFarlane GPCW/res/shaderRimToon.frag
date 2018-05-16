@@ -14,7 +14,7 @@ void main() {
 	vec3 n = normalize(mat3(u_vm) * v_norm);      // convert normal to view space
 	vec3 p = vec3((u_pm) * v_pos);                // position in clip space
 	vec3 v = normalize(p);                        // normalised eye vector
-	float vdn = 0.6 - max(dot(v, n), 0.0);        // the rim contribution
+	float vdn = 0.6 - max(dot(v, n), 0.0);        // the rim 
 	
 	float intensity;
 	vec4 color;

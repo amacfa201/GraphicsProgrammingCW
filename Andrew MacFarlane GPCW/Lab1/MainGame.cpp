@@ -92,15 +92,15 @@ void MainGame::gameLoop()
 {
 	while (theGameState != GameState::EXIT)
 	{
-		processInput();
-		SetPhongValues();
-		drawGame();
-		//collision(marineMesh.getSpherePos(), marineMesh.getSphereRadius(), carMesh.getSpherePos(), carMesh.getSphereRadius());
+		HandleInput();
+		
+		drawLoop();
+		
 		
 	}
 }
 
-void MainGame::processInput()
+void MainGame::HandleInput()
 {
 	//Gets player input and responds accordingly
 	SDL_Event evnt;
@@ -125,8 +125,7 @@ void MainGame::processInput()
 
 
 			case SDLK_3:
-				//A - Key
-				//Moves player left if within bounds of screen
+				
 				
 				effect = 3;
 				break;
@@ -175,60 +174,7 @@ void MainGame::processInput()
 }
 
 
-//bool MainGame::collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad)
-//{
-//	float distance = glm::sqrt((m2Pos.x - m1Pos.x)*(m2Pos.x - m1Pos.x) + (m2Pos.y - m1Pos.y)*(m2Pos.y - m1Pos.y) + (m2Pos.z - m1Pos.z)*(m2Pos.z - m1Pos.z));
-//
-//	if (distance < (m1Rad + m2Rad))
-//	{
-//		audioDevice.setlistener(myCamera.getPos(), m1Pos); //add bool to mesh
-//		//playAudio(whistle, m1Pos);
-//		return true;
-//	}
-//	else
-//	{
-//		return false;
-//	}
-//}
 
-//void MainGame::playAudio(unsigned int Source, glm::vec3 pos)
-//{
-//	
-//	ALint state; 
-//	alGetSourcei(Source, AL_SOURCE_STATE, &state);
-//	/*
-//	Possible values of state
-//	AL_INITIAL
-//	AL_STOPPED
-//	AL_PLAYING
-//	AL_PAUSED
-//	*/
-//	if (AL_PLAYING != state)
-//	{
-//		//audioDevice.playSound(Source, pos);
-//	}
-//}
-
-//void MainGame::setADSLighting()
-//{
-//	modelView = marineTransform.GetModel() * myCamera.GetView();
-//	
-//	toonShader.setMat4("ModelViewMatrix", modelView);
-//	toonShader.setMat4("ProjectionMatrix", myCamera.GetProjection()); 
-//	
-//	glm::mat4 normalMatrix = transpose(inverse(modelView));
-//	
-//	toonShader.setMat4("NormalMatrix", normalMatrix);
-//
-//	toonShader.setVec4("Position", glm::vec4(10.0,10.0,10.0,1.0));
-//	toonShader.setVec3("Intensity", glm::vec3(0.0, 0.0, 0.0));
-//
-//	toonShader.setVec3("ka", glm::vec3(0.5, 0.5, 0.5));
-//	toonShader.setVec3("kd", glm::vec3(0.5, 0.5, 0.5));
-//	toonShader.setVec3("ks", glm::vec3(0.5, 0.5, 0.5));
-//
-//	toonShader.setFloat("Shininess", 0.5);
-//}
 
 void MainGame::setToonLighting()
 {
@@ -261,18 +207,12 @@ void MainGame::SetPhongValues()
 	
 
 	
-	/*phongShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-	phongShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-	phongShader.setVec3("lightPos", lightPos);
-	phongShader.setVec3("viewPos", myCamera.getPos());*/
+	
 	
 	phongShader.setVec3("viewPos", myCamera.getPos());
 	phongShader.setVec3("lightPos", glm::vec3(0.5,0.5,0.5));
-	//phongShader.setMat4("transform", phongTransform.GetModel());
-
-	/*phongShader.setMat4("projection", myCamera.GetProjection());
-	phongShader.setMat4("view", myCamera.GetView());*/
-	//phongShader.setMat4("transform", phongTransform.GetModel());
+	
+	
 	phongShader.setBool("blinn", true);
 
 }
@@ -283,10 +223,7 @@ void MainGame::SetHairValues()
 	hairShader.setMat4("view", myCamera.GetView());
 	hairShader.setMat4("model", carTransform.GetModel());
 
-	/*hairShader.setVec3("lightDir", glm::vec3(0.5, 0.5, 0.5));
-	hairShader.setMat4("u_vm", myCamera.GetView());
-	hairShader.setMat4("u_pm", myCamera.GetProjection());
-	hairShader.setMat4("v_pos", carTransform.GetModel());*/
+	
 }
 
 void MainGame::SetLightValues()
@@ -333,9 +270,8 @@ void MainGame::ApplyEffect(float effect)
 		fogShader.Update(rockTransform, myCamera);
 		therockMesh.draw();
 		therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
-
-
 	}
+	
 	if (effect == 2)
 	{
 		rimToonShader.Bind();
@@ -368,14 +304,14 @@ void MainGame::ApplyEffect(float effect)
 		explosionShader.Bind();
 		SetExplosionValues();
 		explosionShader.Update(carTransform, myCamera);
-		carMesh.draw();
-		carMesh.updateSphereData(*carTransform.GetPos(), 0.62f);
+		//carMesh.draw();
+		//carMesh.updateSphereData(*carTransform.GetPos(), 0.62f);
 
 		explosionShader.Bind();
 		SetExplosionValues();
 		explosionShader.Update(rockTransform, myCamera);
-		therockMesh.draw();
-		therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
+		//therockMesh.draw();
+		//therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
 	}
 	
 	if (effect == 4)
@@ -383,8 +319,8 @@ void MainGame::ApplyEffect(float effect)
 		explosionHairShader.Bind();
 		SetExplosionHairShader();
 		explosionHairShader.Update(marineTransform, myCamera);
-		marineMesh.draw();
-		marineMesh.updateSphereData(*marineTransform.GetPos(), 0.62f);
+		//marineMesh.draw();
+		//marineMesh.updateSphereData(*marineTransform.GetPos(), 0.62f);
 
 		explosionHairShader.Bind();
 		SetExplosionHairShader();
@@ -395,8 +331,8 @@ void MainGame::ApplyEffect(float effect)
 		explosionHairShader.Bind();
 		SetExplosionHairShader();
 		explosionHairShader.Update(rockTransform, myCamera);
-		therockMesh.draw();
-		therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
+		//therockMesh.draw();
+		//therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
 	}
 
 	if (effect == 5)
@@ -404,14 +340,14 @@ void MainGame::ApplyEffect(float effect)
 		hairShader.Bind();
 		SetHairValues();
 		hairShader.Update(marineTransform, myCamera);
-		marineMesh.draw();
-		marineMesh.updateSphereData(*marineTransform.GetPos(), 0.62f);
+		//marineMesh.draw();
+		//marineMesh.updateSphereData(*marineTransform.GetPos(), 0.62f);
 
 		hairShader.Bind();
 		SetHairValues();
 		explosionShader.Update(carTransform, myCamera);
-		carMesh.draw();
-		carMesh.updateSphereData(*carTransform.GetPos(), 0.62f);
+		//carMesh.draw();
+		//carMesh.updateSphereData(*carTransform.GetPos(), 0.62f);
 
 		hairShader.Bind();
 		SetHairValues();
@@ -549,93 +485,20 @@ void MainGame::SetMeshPositions()
 
 	phongTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter) * 5));
 	phongTransform.SetRot(glm::vec3(0.0, counter / 2, 0.0));
-	phongTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
+	phongTransform.SetScale(glm::vec3(0.8, 0.8, 0.8));
 
 }
 
-void MainGame::drawGame()
+void MainGame::drawLoop()
 {
 	_gameDisplay.clearDisplay(0.25f, 0.0f, 0.0f, 1.0f);
 
 	SetMeshPositions();
 	ApplyEffect(effect);
 	
-	////Guitar - fog
-	//marineTransform.SetPos(glm::vec3(0.5, 0.5, 0.5));
-	//marineTransform.SetRot(glm::vec3(-0.65, counter/2, 0));
-	//marineTransform.SetScale(glm::vec3(0.85, 0.85, 0.85));
-	////marineTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
-	//
-	////
-	////fogShader.Bind();
-	////SetFogValues(marineMesh.getSpherePos().z + 4);
-	////fogShader.Update(marineTransform, myCamera);
-	//
-	//explosionShader.Bind();
-	//SetExplosionValues();
-	//explosionShader.Update(marineTransform, myCamera);
-	//
-	///*rimToonShader.Bind();
-	//SetRimToonValues();
-	//rimToonShader.Update(marineTransform, myCamera);*/
-
-	//
-	////rockTexture.Bind(0);
-	////marineMesh.draw();
-	////marineMesh.updateSphereData(*marineTransform.GetPos(), 0.62f);
-	//
-	////Orange - Blur
-	//carTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter)));
-	//carTransform.SetRot(glm::vec3(0.0, counter/2, 0.0));
-	////carTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
-	//carTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
-	//explosionHairShader.Bind();
-	//SetExplosionHairShader();
-	//explosionHairShader.Update(carTransform, myCamera);
-	//carMesh.draw();
-	//carMesh.updateSphereData(*carTransform.GetPos(), 0.62f);
-
-	////The Rock - Rim Toon
-	//rockTransform.SetPos(glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)));
-	//rockTransform.SetRot(glm::vec3(0.0, counter/2, 0.0));
-	//rockTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
-	////rockTransform.SetScale(glm::vec3(0.6, 0.6, 0.6));
-	//rockTexture.Bind(0);
-
-	//blurShader.Bind();
-	//blobEffect();
-	//blurShader.Update(rockTransform, myCamera);
-	////therockMesh.draw();
-	////therockMesh.updateSphereData(*rockTransform.GetPos(), 0.62f);
-
-	////phongModelLighSource
-	//phongLightTransform.SetPos(lightPos);
-	//phongLightTransform.SetRot(glm::vec3(0.0, 0 , 0.0));
-	//phongLightTransform.SetScale(glm::vec3(0.8, 0.8, 0.8));
-	//lightSourceShader.Bind();
-	//lightSourceShader.Update(phongLightTransform, myCamera);
-	////phongLightMesh.draw();
-	////phongLightMesh.updateSphereData(*phongLightTransform.GetPos(), 0.62f);
-
-
-	////phongModel
-	//phongTransform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter) * 5));
-	//phongTransform.SetRot(glm::vec3(0.0,counter / 2 , 0.0));
-	//phongTransform.SetScale(glm::vec3(0.01, 0.01, 0.01));
-	//
-	//phongShader.Bind();
-	//SetPhongValues();
-	//phongShader.Update(phongTransform, myCamera);
-	//
-	//phongMesh.draw();
-	//phongMesh.updateSphereData(*phongTransform.GetPos(), 0.62f);
-	
-	
-
 
 	counter = counter + 0.005f;
-	glm::vec3 yerMaw = phongLightMesh.getSpherePos();
-	//cout << yerMaw.x << " " << yerMaw.y << " " << yerMaw.z << "\n";
+	
 	glEnableClientState(GL_COLOR_ARRAY); 
 	glEnd();
 

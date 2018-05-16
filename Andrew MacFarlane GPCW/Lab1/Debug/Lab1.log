@@ -1,11 +1,3 @@
-﻿  Texture.cpp
-  Shader.cpp
-  Overlay.cpp
-  Mesh.cpp
-c:\users\amacfa201\documents\github\graphicsprogrammingcw\andrew macfarlane gpcw\lab1\mesh.cpp(62): warning C4930: 'Sphere meshSphere(void)': prototyped function not called (was a variable definition intended?)
-  MainGame.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  main.cpp
+﻿  MainGame.cpp
   Lab1.vcxproj -> C:\Users\amacfa201\Documents\GitHub\GraphicsProgrammingCW\Andrew MacFarlane GPCW\Debug\Lab1.exe
   Lab1.vcxproj -> C:\Users\amacfa201\Documents\GitHub\GraphicsProgrammingCW\Andrew MacFarlane GPCW\Debug\Lab1.pdb (Partial PDB)
