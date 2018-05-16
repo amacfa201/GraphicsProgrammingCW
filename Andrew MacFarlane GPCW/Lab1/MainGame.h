@@ -37,11 +37,14 @@ private:
 	void SetLightValues();
 	void SetHairValues();
 	void SetExplosionValues();
+	void SetExplosionHairShader(); 
+	void ApplyEffect(float effect);
+	void SetMeshPositions();
 
 	Display _gameDisplay;
-	GameState _gameState;
-	Mesh guitarMesh;
-	Mesh orangeMesh;
+	GameState theGameState;
+	Mesh marineMesh;
+	Mesh carMesh;
 	Mesh therockMesh;
 	Mesh phongMesh;
 	Mesh phongLightMesh;
@@ -58,6 +61,7 @@ private:
 	Shader lightSourceShader;
 	Shader hairShader;
 	Shader explosionShader;
+	Shader explosionHairShader;
 
 	glm::vec3 lightPos;
 
@@ -67,6 +71,8 @@ private:
 	Audio audioDevice;
 
 	float counter;
+	float effect;
+
 	unsigned int whistle;
 	unsigned int backGroundMusic;
 };

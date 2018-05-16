@@ -7,7 +7,7 @@ Shader::Shader()
 {
 }
 
-void Shader::init(const std::string& vertFile, const std::string& fragFile)
+void Shader::initialise(const std::string& vertFile, const std::string& fragFile)
 {
 	program = glCreateProgram(); // create shader program (openGL saves as ref number)
 	shaders[0] = CreateShader(LoadShader(vertFile), GL_VERTEX_SHADER); // create vertex shader
@@ -31,7 +31,7 @@ void Shader::init(const std::string& vertFile, const std::string& fragFile)
 	uniforms[TRANSFORM_U] = glGetUniformLocation(program, "transform"); // associate with the location of uniform variable within a program
 }
 
-void Shader::init(const std::string& vertFile, const std::string& fragFile, const std::string& geoFile)
+void Shader::initialise(const std::string& vertFile, const std::string& fragFile, const std::string& geoFile)
 {
 	program = glCreateProgram(); // create shader program (openGL saves as ref number)
 	shaders[0] = CreateShader(LoadShader(vertFile), GL_VERTEX_SHADER); // create vertex shader

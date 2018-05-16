@@ -14,7 +14,7 @@ public:
 	Overlay();
 	~Overlay();
 	void drawOL(GLuint program);
-	void init(const std::string& fileName);
+	void initialise(const std::string& fileName);
 
 private:
 	Texture texture;

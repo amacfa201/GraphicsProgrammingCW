@@ -61,7 +61,7 @@ public:
 
 
 	void draw();
-	void init(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
+	void initialise(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
 	void loadModel(const std::string& filename);
 	void initModel(const IndexedModel& model);
 	void updateSphereData(glm::vec3 pos, float radius);

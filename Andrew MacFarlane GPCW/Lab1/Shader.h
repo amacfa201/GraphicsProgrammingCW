@@ -11,8 +11,8 @@ public:
 
 	void Bind(); //Set gpu to use our shaders
 	void Update(const Transform& transform, const Camera& camera);
-	void init(const std::string& vertFile, const std::string& fragFile);
-	void init(const std::string& vertFile, const std::string& fragFile, const std::string& geoFile);
+	void initialise(const std::string& vertFile, const std::string& fragFile);
+	void initialise(const std::string& vertFile, const std::string& fragFile, const std::string& geoFile);
 	GLuint getProgram() { return program; }
 
 	std::string Shader::LoadShader(const std::string& fileName);

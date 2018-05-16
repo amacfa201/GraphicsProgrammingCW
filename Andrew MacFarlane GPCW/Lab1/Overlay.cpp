@@ -7,9 +7,9 @@ Overlay::Overlay()
 	Texture* texture();
 }
 
-void Overlay::init(const std::string& fileName)
+void Overlay::initialise(const std::string& fileName)
 {
-	texture.init("..\\res\\bricks.jpg");
+	texture.initialise("..\\res\\bricks.jpg");
 }
 
 

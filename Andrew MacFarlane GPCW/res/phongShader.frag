@@ -1,11 +1,9 @@
 #version 330 core
 out vec4 FragColor;
 
-in VS_OUT {
-    vec3 FragPos;
-    vec3 Normal;
-   
-} fs_in;
+in vec3 v_norm;
+in vec3 v_pos;
+
 
 
 uniform vec3 lightPos;
@@ -19,13 +17,13 @@ void main()
     vec3 ambient = 0.05 * color;
    
    // diffuse
-    vec3 lightDir = normalize(lightPos * fs_in.FragPos);
-    vec3 normal = normalize(fs_in.Normal);
+    vec3 lightDir = normalize(lightPos * color);
+    vec3 normal = normalize(v_norm);
     float diff = max(dot(lightDir, normal), 0.0);
     vec3 diffuse = diff * color;
     
 	// specular
-    vec3 viewDir = normalize(viewPos - fs_in.FragPos);
+    vec3 viewDir = normalize(viewPos - v_pos);
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = 0.0;
     

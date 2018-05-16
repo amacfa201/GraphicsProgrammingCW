@@ -4,18 +4,17 @@ layout (location = 2) in vec3 VertexNormal;
 
 
 // declare an interface block; see 'Advanced GLSL' for what these are.
-out VS_OUT {
-    vec3 FragPos;
-    vec3 Normal;
-  
-} vs_out;
+
 
 uniform mat4 transform;
 
+out vec3 v_norm;
+out vec3 v_pos;
+
 void main()
 {
-    vs_out.FragPos = VertexPosition;
-    vs_out.Normal = VertexNormal;
+   v_norm = VertexPosition;
+   v_pos  = VertexNormal;
     //gl_Position = projection * view * vec4(VertexPosition, 1.0);
 
 	gl_Position = transform * vec4(VertexPosition,1.0);

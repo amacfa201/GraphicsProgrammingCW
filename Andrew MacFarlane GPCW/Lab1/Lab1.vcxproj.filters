@@ -151,6 +151,15 @@
     <None Include="..\res\explosionShader.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\explodeHairShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\explodeHairShader.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\explodeHairShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">
