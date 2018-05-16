@@ -36,6 +36,7 @@ private:
 	void SetPhongValues();
 	void SetLightValues();
 	void SetHairValues();
+	void SetExplosionValues();
 
 	Display _gameDisplay;
 	GameState _gameState;
@@ -56,6 +57,7 @@ private:
 	Shader phongShader;
 	Shader lightSourceShader;
 	Shader hairShader;
+	Shader explosionShader;
 
 	glm::vec3 lightPos;
 

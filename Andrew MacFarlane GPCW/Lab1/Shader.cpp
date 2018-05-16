@@ -36,7 +36,7 @@ void Shader::init(const std::string& vertFile, const std::string& fragFile, cons
 	program = glCreateProgram(); // create shader program (openGL saves as ref number)
 	shaders[0] = CreateShader(LoadShader(vertFile), GL_VERTEX_SHADER); // create vertex shader
 	shaders[1] = CreateShader(LoadShader(fragFile), GL_FRAGMENT_SHADER); // create fragment shader
-	shaders[1] = CreateShader(LoadShader(geoFile), GL_GEOMETRY_SHADER); // create geometry shader
+	shaders[2] = CreateShader(LoadShader(geoFile), GL_GEOMETRY_SHADER); // create geometry shader
 
 	for (unsigned int i = 0; i < NUM_SHADERS; i++)
 	{
